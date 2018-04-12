@@ -13,7 +13,7 @@ function setCookie() {
         let tab = arrayOfTabs[0];
         const tabUrl = tab.url;
         console.log("setting cookie to "+cookie);
-        chrome.cookies.set({ url: tabUrl, name: 'dozorSiteSession', value: cookie });
+        chrome.cookies.set({ url: tabUrl, name: 'dozorSiteSession', domain: '.dzzzr.ru', path: '/', value: cookie });
         setFieldColorCookie(true);
         chrome.tabs.reload(tab.id);
     });
