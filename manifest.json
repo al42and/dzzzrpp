@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+
+  "name": "DzzzR++",
+  "version": "0.1.0",
+  "description": "Удобности для движка dzzzr.ru",
+
+  "icons": {
+    "128": "icon_128.png",
+    "64": "icon_64.png",
+    "32": "icon_32.png"
+  },
+
+
+  "permissions": [
+    "cookies", "activeTab",
+    "http://classic.dzzzr.ru/",
+    "http://online.dzzzr.ru/"
+  ],
+
+
+  "content_scripts": [{
+    "css": ["content.css"],
+    "js": ["content.js"],
+    "matches": ["http://classic.dzzzr.ru/*", "http://online.dzzzr.ru/*"]
+  }],
+
+  "browser_action": {
+    "default_popup": "popup.html"
+  }
+}
