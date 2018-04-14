@@ -41,7 +41,6 @@ function sendShowHideCheckboxStates() {
 }
 
 function restoreShowHideCheckboxStates(savedShowHideCheckboxStates) {
-
         let titles = document.getElementsByClassName('title');
         for (let i = 0, l = titles.length; i < l; i++) {
             const id = titleHash(titles[i].textContent);
@@ -68,8 +67,8 @@ function restoreShowHideCheckboxStates(savedShowHideCheckboxStates) {
 
 chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
     if (items['enabledShowHideCheckbox']) {
-        // We may have different settings for different tabs, and tab.id is persistent untill browser restart
-        // So we use global variable in the background page instead of chrome.storage.local or something
+        // We may have different settings for different tabs, and tab.id is persistent until the browser restart.
+        // So we use global variable in the background page instead of chrome.storage.local or something.
         chrome.runtime.sendMessage({type: 'getShowHideCheckboxState'}, function (response) {
             restoreShowHideCheckboxStates(response.data);
         });

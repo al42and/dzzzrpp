@@ -45,6 +45,22 @@ function getCookie() {
     });
 }
 
+/**
+ * Enable or disable checkboxes for block hiding
+ */
+function setEnabledShowHide() {
+    chrome.storage.sync.set({ 'enabledShowHideCheckbox': this.checked });
+    // Reset remembered states when disabled
+    if (! this.checked) {
+        chrome.runtime.sendMessage({type: 'resetShowHideCheckboxState'});
+    }
+    // Reload page
+    chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
+        let tab = arrayOfTabs[0];
+        chrome.tabs.reload(tab.id);
+    });
+}
+
 
 function onLoad() {
     // Set up cookie editor
@@ -54,25 +70,18 @@ function onLoad() {
     document.getElementById('cookie').onclick = function() {
         this.select();
     };
-    document.getElementById('cookieForm').onsubmit = function() {
-        setCookie();
-    };
+    document.getElementById('cookieForm').onsubmit = setCookie;
     getCookie();
 
     // Set up setting for show/hide checkboxes
     chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
         let enabled = items.enabledShowHideCheckbox;
         if (typeof enabled === 'undefined') {
-            enabled = true;
+            enabled = false // By default, disabled
         }
         document.getElementById('enabledShowHideCheckbox').checked = enabled;
     });
-    document.getElementById('enabledShowHideCheckbox').onchange = function() {
-        chrome.storage.sync.set({ 'enabledShowHideCheckbox': this.checked });
-        if (! this.checked) {
-            chrome.runtime.sendMessage({type: 'resetShowHideCheckboxState'});
-        }
-    };
+    document.getElementById('enabledShowHideCheckbox').onchange = setEnabledShowHide;
 }
 
 
