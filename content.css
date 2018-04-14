@@ -15,3 +15,9 @@
 .dzzzrpp-show-hide-checkbox:checked + .dzzzrpp-show-hide-title + table{
     display:block;
 }
+.dzzzrpp-show-hide-checkbox + .dzzzrpp-show-hide-title + p{
+    display:none;
+}
+.dzzzrpp-show-hide-checkbox:checked + .dzzzrpp-show-hide-title + p{
+    display:block;
+}

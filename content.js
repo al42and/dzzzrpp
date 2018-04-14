@@ -17,7 +17,16 @@ function insertBefore(newNode, referenceNode) {
  * The hash function os supposedly Java-compatible, but who cares.
  */
 function titleHash(str){
-    let strClean = str.split('<br>')[0];
+    // Cut everything before the first line break
+    let strClean = str.split('<br>')[0].split('найдено кодов')[0];
+    // Manually handle some special cases
+    const magicStrings = ['Статистика вашей команды по состоянию на'];
+    for (let i = 0, l = magicStrings.length; i < l; i++) {
+        if (strClean.startsWith(magicStrings[i])) {
+            strClean = magicStrings[i];
+        }
+    }
+    // Actually compute the hash
     let hash = 0;
     if (strClean.length === 0) return hash;
     for (let i = 0; i < strClean.length; i++) {
