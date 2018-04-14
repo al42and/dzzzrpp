@@ -41,15 +41,13 @@ function titleHash(str){
  * Send the states of the checkbox to the background tab
  */
 function sendShowHideCheckboxStates() {
-    let savedShowHideCheckboxStates = { };
     let checkboxes = document.getElementsByClassName('dzzzrpp-show-hide-checkbox');
     for (let i = 0, l = checkboxes.length; i < l; i++) {
-        savedShowHideCheckboxStates[checkboxes[i].id] = checkboxes[i].checked;
+        window.sessionStorage.setItem(checkboxes[i].id, checkboxes[i].checked);
     }
-    chrome.runtime.sendMessage({type: 'setShowHideCheckboxState', data: savedShowHideCheckboxStates});
 }
 
-function restoreShowHideCheckboxStates(savedShowHideCheckboxStates) {
+function restoreShowHideCheckboxStates() {
         let titles = document.getElementsByClassName('title');
         for (let i = 0, l = titles.length; i < l; i++) {
             const id = titleHash(titles[i].textContent);
@@ -60,10 +58,11 @@ function restoreShowHideCheckboxStates(savedShowHideCheckboxStates) {
             let checkbox = document.createElement('input');
             checkbox.setAttribute('id', checkboxId);
             checkbox.setAttribute('type', 'checkbox');
-            if (typeof savedShowHideCheckboxStates[checkboxId] === 'undefined') {
+            let data = window.sessionStorage.getItem(checkboxId);
+            if (typeof data === 'undefined' || data === null) {
                 checkbox.checked = true;
             } else {
-                checkbox.checked = savedShowHideCheckboxStates[checkboxId];
+                checkbox.checked = (data === 'true');
             }
             checkbox.className = 'dzzzrpp-show-hide-checkbox';
             checkbox.onchange = function () {
@@ -76,11 +75,7 @@ function restoreShowHideCheckboxStates(savedShowHideCheckboxStates) {
 
 chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
     if (items['enabledShowHideCheckbox']) {
-        // We may have different settings for different tabs, and tab.id is persistent until the browser restart.
-        // So we use global variable in the background page instead of chrome.storage.local or something.
-        chrome.runtime.sendMessage({type: 'getShowHideCheckboxState'}, function (response) {
-            restoreShowHideCheckboxStates(response.data);
-        });
+        restoreShowHideCheckboxStates();
     }
 });
 
