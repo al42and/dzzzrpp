@@ -1,14 +1,17 @@
-.collapse{
-    cursor: pointer;
-    display: block;
-    background: #cdf;
+.dzzzrpp-show-hide-checkbox{
+    float:right;
+    margin-top: 10px;
 }
-.collapse + input{
-    display: none; /* hide the checkboxes */
-}
-.collapse + input + div{
+
+.dzzzrpp-show-hide-checkbox + .dzzzrpp-show-hide-title + div{
     display:none;
 }
-.collapse + input:checked + div{
+.dzzzrpp-show-hide-checkbox:checked + .dzzzrpp-show-hide-title + div{
+    display:block;
+}
+.dzzzrpp-show-hide-checkbox + .dzzzrpp-show-hide-title + table{
+    display:none;
+}
+.dzzzrpp-show-hide-checkbox:checked + .dzzzrpp-show-hide-title + table{
     display:block;
 }

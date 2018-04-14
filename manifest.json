@@ -13,7 +13,7 @@
 
 
   "permissions": [
-    "cookies", "activeTab", "declarativeContent",
+    "cookies", "activeTab", "declarativeContent", "storage",
     "http://classic.dzzzr.ru/",
     "http://online.dzzzr.ru/"
   ],

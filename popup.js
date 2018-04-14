@@ -1,3 +1,6 @@
+/**
+ * Event handler to change cookie field color when it is being edited.
+ */
 function setFieldColorCookie(ready) {
     let color = '#ffb2ae';
     if (ready)
@@ -6,6 +9,9 @@ function setFieldColorCookie(ready) {
     return false;
 }
 
+/**
+ * Set session cookie for current page based on the text field.
+ */
 function setCookie() {
     const cookie = document.getElementById('cookie').value;
     chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
@@ -18,6 +24,9 @@ function setCookie() {
     });
 }
 
+/**
+ * Fill the text field with current session cookie.
+ */
 function getCookie() {
     chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
         let tab = arrayOfTabs[0];
@@ -38,17 +47,33 @@ function getCookie() {
 
 
 function onLoad() {
+    // Set up cookie editor
     document.getElementById('cookie').oninput = function() {
         setFieldColorCookie(false);
     };
     document.getElementById('cookie').onclick = function() {
         this.select();
     };
-    document.getElementById('cookie_form').onsubmit = function() {
+    document.getElementById('cookieForm').onsubmit = function() {
         setCookie();
     };
-    //chrome.cookies.onChanged.addListener(getCookie);
     getCookie();
+
+    // Set up setting for show/hide checkboxes
+    chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
+        let enabled = items.enabledShowHideCheckbox;
+        if (typeof enabled === 'undefined') {
+            enabled = true;
+        }
+        document.getElementById('enabledShowHideCheckbox').checked = enabled;
+    });
+    document.getElementById('enabledShowHideCheckbox').onchange = function() {
+        chrome.storage.sync.set({ 'enabledShowHideCheckbox': this.checked });
+        if (! this.checked) {
+            chrome.runtime.sendMessage({type: 'resetShowHideCheckboxState'});
+        }
+    };
 }
+
 
 window.onload = onLoad;
