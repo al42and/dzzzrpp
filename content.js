@@ -82,21 +82,41 @@ function restoreShowHideCheckboxStates() {
         }
 }
 
-chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
+/**
+ * Changes the order of the global game log entries
+ */
+function reverseLog() {
+    const header_cell = document.querySelector("table tbody tr th img[src='/images/s_desc.png'] + a");
+    if (header_cell) {
+        let table = header_cell.parentNode.parentNode.parentNode.parentNode;
+        let rows = table.rows;
+        // Starting from row 1 to keep header in place
+        for (let i = 1, l = rows.length; i < l; i++) {
+            rows[i].parentNode.insertBefore(rows[l-1], rows[i]);
+        }
+    }
+}
+
+
+chrome.storage.sync.get(['enabledShowHideCheckbox', 'enabledLogReversing'], function(items) {
     if (items['enabledShowHideCheckbox']) {
-        restoreShowHideCheckboxStates(items);
+        restoreShowHideCheckboxStates();
+    }
+    if (items['enabledLogReversing']) {
+        reverseLog();
     }
 });
 
 
 /**
  * TODO:
- * * Reverse the order of the log
  * * Table for KO instead of comma separated list
  * * Highlight the images with embedded GPS coordinates
  * * Highlight images with link pointing to different image
  * * Find html comments
  * * Remove 0 minute bonus/penalty in statistics
+ * * Get proper tracker for TODO/issues
+ * * Add hints to settings popup
  */
 
 

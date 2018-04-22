@@ -19,7 +19,6 @@ function setCookie() {
     chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
         let tab = arrayOfTabs[0];
         const tabUrl = tab.url;
-        console.log("setting cookie to "+cookie);
         chrome.cookies.set({ url: tabUrl, name: 'dozorSiteSession', domain: '.dzzzr.ru', path: '/', value: cookie });
         setFieldColorCookie(true);
         chrome.tabs.reload(tab.id);
@@ -48,19 +47,29 @@ function getCookie() {
 }
 
 /**
- * Enable or disable checkboxes for block hiding.
+ * Save setting value to chrome storage and reload current tab.
  */
-function setEnabledShowHide() {
-    chrome.storage.sync.set({ 'enabledShowHideCheckbox': this.checked });
-    // Reset remembered states when disabled
-    if (! this.checked) {
-        chrome.runtime.sendMessage({type: 'resetShowHideCheckboxState'});
-    }
+function saveSettingAndReload(settingId, value) {
+    chrome.storage.sync.set({ [settingId]: value });
     // Reload page
     chrome.tabs.query({active: true, currentWindow: true}, function (arrayOfTabs) {
         let tab = arrayOfTabs[0];
-        chrome.tabs.reload(tab.id);
+        chrome.tabs.reload(tab.id);});
+}
+
+
+/**
+ * Attach callbacks to the checkbox that controls this extension's settings.
+ */
+function addSettingCheckboxHandler(settingId, handler, defaultValue = false) {
+    chrome.storage.sync.get([settingId], function(items) {
+        let enabled = items[settingId];
+        if (typeof enabled === 'undefined') {
+            enabled = defaultValue;
+        }
+        document.getElementById(settingId).checked = enabled;
     });
+    document.getElementById(settingId).onchange = handler;
 }
 
 
@@ -76,14 +85,13 @@ function onLoad() {
     getCookie();
 
     // Set up setting for show/hide checkboxes
-    chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
-        let enabled = items.enabledShowHideCheckbox;
-        if (typeof enabled === 'undefined') {
-            enabled = false // By default, disabled
-        }
-        document.getElementById('enabledShowHideCheckbox').checked = enabled;
+    addSettingCheckboxHandler('enabledShowHideCheckbox', function () {
+        saveSettingAndReload('enabledShowHideCheckbox', this.checked);
     });
-    document.getElementById('enabledShowHideCheckbox').onchange = setEnabledShowHide;
+    // Set up setting for log reversing
+    addSettingCheckboxHandler('enabledLogReversing', function () {
+        saveSettingAndReload('enabledLogReversing', this.checked);
+    });
 }
 
 window.onload = onLoad;

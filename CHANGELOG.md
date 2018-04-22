@@ -1,5 +1,8 @@
 ChangeLog
 
+ - 0.2.3
+    - Some refactoring of settings page
+    - Can reverse global log
  - 0.2.2
    - Change the way block status is stored
  - 0.2.1
