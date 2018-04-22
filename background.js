@@ -1,3 +1,5 @@
+'use strict';
+
 // Use example from Chromium to control when extension button is clickable
 chrome.runtime.onInstalled.addListener(function() {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {

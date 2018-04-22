@@ -13,7 +13,7 @@ function insertBefore(newNode, referenceNode) {
 
 /**
  * Calculate 32bit hash of the block title \p str. Used for identifying blocks to hide based on their title string.
- * We drop everything after first <br> to ignore changes in the number of found codes.
+ * We use magic preprocessing to make it make more sense.
  * The hash function os supposedly Java-compatible, but who cares.
  */
 function titleHash(str){
@@ -38,17 +38,21 @@ function titleHash(str){
 }
 
 /**
- * Send the states of the checkbox to the background tab
+ * Save the states of the checkbox to the session storage.
  */
-function sendShowHideCheckboxStates() {
+function saveShowHideCheckboxStates() {
     let checkboxes = document.getElementsByClassName('dzzzrpp-show-hide-checkbox');
     for (let i = 0, l = checkboxes.length; i < l; i++) {
         window.sessionStorage.setItem(checkboxes[i].id, checkboxes[i].checked);
     }
 }
 
+/**
+ * Create checkboxes and try to restore their state from session storage.
+ */
 function restoreShowHideCheckboxStates() {
         let titles = document.getElementsByClassName('title');
+        const logHash = titleHash('Лог игры');
         for (let i = 0, l = titles.length; i < l; i++) {
             const id = titleHash(titles[i].textContent);
             const checkboxId = 'dzzzrpp_hide_checkbox' + id;
@@ -58,15 +62,20 @@ function restoreShowHideCheckboxStates() {
             let checkbox = document.createElement('input');
             checkbox.setAttribute('id', checkboxId);
             checkbox.setAttribute('type', 'checkbox');
-            let data = window.sessionStorage.getItem(checkboxId);
+
+            const data = window.sessionStorage.getItem(checkboxId);
             if (typeof data === 'undefined' || data === null) {
-                checkbox.checked = true;
+                if (id === logHash) { // By default, hide full log
+                    checkbox.checked = false;
+                } else {
+                    checkbox.checked = true;
+                }
             } else {
                 checkbox.checked = (data === 'true');
             }
             checkbox.className = 'dzzzrpp-show-hide-checkbox';
             checkbox.onchange = function () {
-                sendShowHideCheckboxStates();
+                saveShowHideCheckboxStates();
             };
 
             insertBefore(checkbox, titles[i])
@@ -75,7 +84,7 @@ function restoreShowHideCheckboxStates() {
 
 chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
     if (items['enabledShowHideCheckbox']) {
-        restoreShowHideCheckboxStates();
+        restoreShowHideCheckboxStates(items);
     }
 });
 
@@ -85,7 +94,9 @@ chrome.storage.sync.get(['enabledShowHideCheckbox'], function(items) {
  * * Reverse the order of the log
  * * Table for KO instead of comma separated list
  * * Highlight the images with embedded GPS coordinates
+ * * Highlight images with link pointing to different image
  * * Find html comments
+ * * Remove 0 minute bonus/penalty in statistics
  */
 
 

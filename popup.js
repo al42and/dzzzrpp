@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Event handler to change cookie field color when it is being edited.
  */
@@ -46,7 +48,7 @@ function getCookie() {
 }
 
 /**
- * Enable or disable checkboxes for block hiding
+ * Enable or disable checkboxes for block hiding.
  */
 function setEnabledShowHide() {
     chrome.storage.sync.set({ 'enabledShowHideCheckbox': this.checked });
@@ -83,6 +85,5 @@ function onLoad() {
     });
     document.getElementById('enabledShowHideCheckbox').onchange = setEnabledShowHide;
 }
-
 
 window.onload = onLoad;

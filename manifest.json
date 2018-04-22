@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "DzzzR++",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Удобности для движка dzzzr.ru",
 
   "icons": {
@@ -20,10 +20,11 @@
 
 
   "content_scripts": [{
-    "css": ["content.css"],
-    "js": ["content.js"],
-    "matches": ["http://classic.dzzzr.ru/*", "http://online.dzzzr.ru/*"]
-  }],
+      "css": ["content.css"],
+      "js": ["content.js"],
+      "matches": ["http://classic.dzzzr.ru/*", "http://online.dzzzr.ru/*"],
+      "run_at": "document_end"
+    }],
 
   "background": {
     "scripts": ["background.js"],
