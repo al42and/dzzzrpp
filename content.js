@@ -116,7 +116,6 @@ chrome.storage.sync.get(['enabledShowHideCheckbox', 'enabledLogReversing'], func
  * * Find html comments
  * * Remove 0 minute bonus/penalty in statistics
  * * Get proper tracker for TODO/issues
- * * Add hints to settings popup
  */
 
 

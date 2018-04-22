@@ -6,19 +6,22 @@
     <script src="popup.js"></script>
 </head>
 <body>
-<div align="left">
+<div align="left" title='Добавить в движок галочки, позволяющие скрывать блоки (задания, лог и т.п.). Для каждой вкладки работает независимо.'>
     <input id='enabledShowHideCheckbox' name='enabledShowHideCheckbox' type='checkbox'/>
     <label for='enabledShowHideCheckbox'>Сворачивание блоков</label>
 </div>
-<div align="left">
+<div align="left" title='Поменять порядок событий в капитанском логе игры (более новые &mdash; сверху).'>
     <input id='enabledLogReversing' name='enabledLogReversing' type='checkbox'/>
     <label for='enabledLogReversing'>Инверсия капитанского лога</label>
 </div>
-<div align="left">
+<div align="left" title='Cookie текущей сессии. Зная его можно войти в один аккаунт с разных устройств.'>
     <form id='cookieForm' autocomplete='off'>
     <label for='cookie'>&#x1F36A;</label>
     <input id='cookie' name='cookie' type='text'/>
     </form>
+</div>
+<div align="right" style="font-size: smaller; color: gray">
+    Версия <span id="version">...</span>
 </div>
 <script src="popup.js"></script>
 </body>

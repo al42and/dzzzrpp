@@ -1,5 +1,7 @@
 ChangeLog
 
+ - 0.2.4
+    - Tooltips
  - 0.2.3
     - Some refactoring of settings page
     - Can reverse global log

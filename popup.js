@@ -92,6 +92,10 @@ function onLoad() {
     addSettingCheckboxHandler('enabledLogReversing', function () {
         saveSettingAndReload('enabledLogReversing', this.checked);
     });
+
+    // Set version
+    const manifestData = chrome.runtime.getManifest();
+    document.getElementById('version').innerText = manifestData.version;
 }
 
 window.onload = onLoad;
