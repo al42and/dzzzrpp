@@ -16,13 +16,61 @@ function reverseLog() {
 }
 
 /**
- * Table for KO instead of list
+ * Add tooltips for KOs with their numbers
  */
+function hasNonWhitespace(str) {
+    return !!str.replace(/\s/g, '').length
+}
+function formatKOHint(item, index) {
+    const metka = index + 1;
+    const ret = `<span title="Метка ${metka}" class="underdot">${item.trim().replace(',','')}</span>`;
+    console.log(`${item} (${metka}) : ${ret}`);
+    return ret;
+}
+function elemToHTML(e) {
+    let wrap = document.createElement('div');
+    wrap.append(e.cloneNode(true));
+    console.log('e2h: ' + wrap.innerHTML);
+    return wrap.innerHTML;
+}
+function replaceTextNodeWithHTML(node, html) {
+    let newNode = document.createElement('span');
+    newNode.innerHTML = html;
+    node.parentNode.insertBefore(newNode, node);
+    node.parentNode.removeChild(node);
+    return newNode;
+}
 function addKOHints() {
-    let strongs = document.getElementsByTagName('strong');
-    for (let i = 0, l = titles.length; i < l; i++) {
-        if (strongs[i].text === 'Коды сложности') {
-            //...
+    const strongs = document.getElementsByTagName('strong');
+    for (let i = 0, l = strongs.length; i < l; i++) {
+        if (strongs[i].innerText === 'Коды сложности') {
+            let headNode = strongs[i].nextSibling;
+            while (headNode) {
+                if (headNode.nodeType === Node.TEXT_NODE && hasNonWhitespace(headNode.textContent)) {
+                    let tokens = headNode.textContent.split(':');
+                    if (tokens.length >= 2) {
+                        if (tokens[0].trim() !== 'Найдено кодов') {
+                            let kos = tokens.pop().split(','); /* Array of (possibly HTML) strings representing KOs */
+                            const levelName = tokens.join(':'); /* We might have several ":" in level name */
+                            let nextNode = headNode.nextSibling;
+                            while (nextNode && nextNode.tagName !== 'BR') { /* Read until end of displayed line */
+                                let currentNode = nextNode;
+                                if (currentNode.tagName === 'SPAN') {
+                                    kos.push(elemToHTML(currentNode));
+                                } else {
+                                    kos = kos.concat(currentNode.textContent.split(','));
+                                }
+                                nextNode = currentNode.nextSibling;
+                                currentNode.parentNode.removeChild(currentNode);
+                            }
+                            let kosNew = kos.filter(hasNonWhitespace).map(formatKOHint);
+                            headNode = replaceTextNodeWithHTML(headNode, `${levelName}: ${kosNew.join(', ')}`);
+                        }
+
+                    }
+                }
+                headNode = headNode.nextSibling;
+            }
         }
     }
 }
@@ -40,10 +88,10 @@ chrome.storage.sync.get(['enabledKOHints', 'enabledLogReversing'], function(item
 
 /**
  * TODO:
- * * Table for KO instead of comma separated list
  * * Highlight the images with embedded GPS coordinates
  * * Highlight images with link pointing to different image
  * * Find html comments
  * * Remove 0 minute bonus/penalty in statistics
+ * * Change timer color
  * * Get proper tracker for TODO/issues
  */

@@ -85,6 +85,10 @@ function onLoad() {
     getCookie();
 
     // Set up setting for log reversing
+    addSettingCheckboxHandler('enabledKOHints', function () {
+        saveSettingAndReload('enabledKOHints', this.checked);
+    });
+    // Set up setting for log reversing
     addSettingCheckboxHandler('enabledLogReversing', function () {
         saveSettingAndReload('enabledLogReversing', this.checked);
     });

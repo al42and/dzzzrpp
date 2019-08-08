@@ -1,5 +1,7 @@
 ChangeLog
 
+ - 0.3.0
+    - Add hints for KOs
  - 0.2.5
     - Remove hide blocks, because new interface does not need it
  - 0.2.4
