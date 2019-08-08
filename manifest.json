@@ -1,7 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "DzzzR++",
+  "name": "DzzzR++: Удобности для движка dzzzr.ru",
+  "short_name": "DzzzR++",
   "version": "0.3.0",
   "description": "Удобности для движка dzzzr.ru",
 
