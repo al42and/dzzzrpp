@@ -84,10 +84,6 @@ function onLoad() {
     document.getElementById('cookieForm').onsubmit = setCookie;
     getCookie();
 
-    // Set up setting for show/hide checkboxes
-    addSettingCheckboxHandler('enabledShowHideCheckbox', function () {
-        saveSettingAndReload('enabledShowHideCheckbox', this.checked);
-    });
     // Set up setting for log reversing
     addSettingCheckboxHandler('enabledLogReversing', function () {
         saveSettingAndReload('enabledLogReversing', this.checked);

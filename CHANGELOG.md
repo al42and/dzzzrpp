@@ -1,5 +1,7 @@
 ChangeLog
 
+ - 0.2.5
+    - Remove hide blocks, because new interface does not need it
  - 0.2.4
     - Tooltips
  - 0.2.3
